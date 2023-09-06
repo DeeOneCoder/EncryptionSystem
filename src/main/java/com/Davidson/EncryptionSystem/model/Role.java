@@ -2,6 +2,7 @@ package com.Davidson.EncryptionSystem.model;
 
 public enum Role {
 
-    USER,
-    ADMIN
+    NORMAL_USER,
+    POWER_USER,
+    ADMIN_USER
 }
