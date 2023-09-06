@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "users", schema = "active_users", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "username"}))
+@Table(name = "users", schema = "active_users", uniqueConstraints = @UniqueConstraint(columnNames = {"full_name", "username"}))
 public class Users implements UserDetails {
 
     @Id
@@ -25,6 +25,7 @@ public class Users implements UserDetails {
 
 
     @NonNull
+    @Column(name = "full_name")
     private String fullName;
 
     @NonNull

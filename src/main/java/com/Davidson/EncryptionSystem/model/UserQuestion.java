@@ -16,11 +16,13 @@ public class UserQuestion {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Use GenerationType.IDENTITY for MySQL
     private int id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
-    private Users user;
 
     private String question;
     private String answer;
     private String secretKey;
+
+    @OneToOne(optional = false, orphanRemoval = true)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    private Users users;
+
 }
