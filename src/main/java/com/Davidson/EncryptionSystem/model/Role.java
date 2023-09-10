@@ -1,8 +1,10 @@
 package com.Davidson.EncryptionSystem.model;
 
+import javax.validation.constraints.NotBlank;
+
 public enum Role {
 
-    NORMAL_USER,
-    POWER_USER,
-    ADMIN_USER
+    @NotBlank
+    USER,
+    ADMIN
 }

@@ -4,9 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
@@ -24,17 +28,19 @@ public class UserActivity {
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
-    @NonNull
+    @NotBlank(message = "Encryption Title can not be blank")
+    @NotNull(message = "Encryption Title can not be null")
+    @NotEmpty(message = "Encryption Title can not be empty")
     @Column(name = "title")
     private String encryptionTitle;
 
-    @NonNull
+    @NotBlank
     private String passkey;
 
-    @NonNull
-    private LocalDate date = LocalDate.now();
+    @Value("${LocalDate.now()}")
+    private LocalDate date;
 
-    @NonNull
+    @NotBlank
     @Enumerated(value = EnumType.STRING)
     private Activity activity;
 
