@@ -28,6 +28,7 @@ public class UserQuestion {
     @NotNull(message = "Can not be null")
     private String answer;
 
+
     @NotBlank
     @NotNull
     @NotEmpty
@@ -37,5 +38,7 @@ public class UserQuestion {
     @OneToOne(optional = true)
     @JoinColumn(name = "user_id", unique = true)
     private Users user;
+
+
 
 }

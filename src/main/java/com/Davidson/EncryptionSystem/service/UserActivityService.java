@@ -8,9 +8,26 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+<<<<<<< Updated upstream
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+=======
+<<<<<<< HEAD
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.awt.print.Pageable;
+=======
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+
+>>>>>>> parent of 0128780 (All endpoint for creation of User)
+>>>>>>> Stashed changes
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,9 +39,16 @@ public class UserActivityService {
     @Autowired
     private final UserActivityRepository userActivityRepository;
 
+<<<<<<< Updated upstream
     @Cacheable(value = "allUserActivities")
     public List<UserActivity> findByUser(Users user){
         return userActivityRepository.findByUser(user).orElseThrow(()-> new RuntimeException("No Activity for Specified User"));
+=======
+<<<<<<< HEAD
+    @Cacheable("allUserActivities")
+    public List<UserActivity> getAllActivities(){
+        return userActivityRepository.findAll();
+>>>>>>> Stashed changes
     }
 
     @Cacheable(value = "singleActivity", key = "#title")
@@ -46,18 +70,63 @@ public class UserActivityService {
         return activities.stream().filter(activity -> activity.getActivity().equals(activityString)).collect(Collectors.toList());
     }
 
+<<<<<<< Updated upstream
     @Cacheable(value = "encryptionActivities")
     public List<UserActivity> getEncryptionActivities(Users user){
         return findByUser(user).stream()
+=======
+    @Cacheable("decryptionActivities")
+    public List<UserActivity> getDecryptionActivities(){
+        return userActivityRepository.findAll()
+                .stream()
+                .filter(userActivity -> userActivity.getActivity().equals(Activity.DECRYPT))
+                .collect(Collectors.toList());
+=======
+    @Cacheable(value = "allUserActivities", key = "#id")
+    public List<UserActivity> findByUser(long user_id){
+        return userActivityRepository.findByUser(user_id).orElseThrow(()-> new RuntimeException("No Activity for Specified User"));
+    }
+
+    @Cacheable(value = "singleActivity", key = "#id+ ' ' +#title")
+    public List<UserActivity> findActivity(String title, long user_id){
+        List<UserActivity> activities = findByUser(user_id);
+        return activities.stream().filter(activity -> activity.getEncryptionTitle().equals(title)).collect(Collectors.toList());
+    }
+
+
+    @Cacheable(value = "getActivityByDate", key = "#id+ ' ' +#localDate")
+    public List<UserActivity> getByDate(LocalDate localDate, long user_id){
+        List<UserActivity> activities = findByUser(user_id);
+        return activities.stream().filter(activity -> activity.getDate().equals(localDate)).collect(Collectors.toList());
+    }
+
+    @Cacheable(value = "getActivityByType", key = "#id + ' ' + #activityString")
+    public List<UserActivity> getActivityByType(Activity activityString, long user_id){
+        List<UserActivity> activities = findByUser(user_id);
+        return activities.stream().filter(activity -> activity.getActivity().equals(activityString)).collect(Collectors.toList());
+    }
+
+    @Cacheable(value = "encryptionActivities")
+    public List<UserActivity> getEncryptionActivities(long user_id){
+        return findByUser(user_id).stream()
+>>>>>>> Stashed changes
                 .filter(activity -> activity.getActivity()
                         .equals(Activity.ENCRYPT)).collect(Collectors.toList());
     }
 
     @Cacheable(value = "decryptionActivities")
+<<<<<<< Updated upstream
     public List<UserActivity> getDecryptionActivities(Users user){
         return findByUser(user).stream()
                 .filter(activity -> activity.getActivity()
                         .equals(Activity.DECRYPT)).collect(Collectors.toList());
+=======
+    public List<UserActivity> getDecryptionActivities(long user_id){
+        return findByUser(user_id).stream()
+                .filter(activity -> activity.getActivity()
+                        .equals(Activity.DECRYPT)).collect(Collectors.toList());
+>>>>>>> parent of 0128780 (All endpoint for creation of User)
+>>>>>>> Stashed changes
     }
 
     @CacheEvict(value = {"allUserActivities", "encryptionActivities", "getActivityByType", "getActivityByDate"}, allEntries = true)

@@ -29,7 +29,11 @@ public class SecurityConfig {
                         .anyRequest()
                         .authenticated())
                 .sessionManagement()
+<<<<<<< Updated upstream
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+=======
+                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+>>>>>>> Stashed changes
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(usersAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

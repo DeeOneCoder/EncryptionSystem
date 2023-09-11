@@ -1,7 +1,18 @@
 package com.Davidson.EncryptionSystem.model;
 
+<<<<<<< Updated upstream
 import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
+=======
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+<<<<<<< HEAD
+=======
+import org.springframework.beans.factory.annotation.Value;
+>>>>>>> parent of 0128780 (All endpoint for creation of User)
+>>>>>>> Stashed changes
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -33,15 +44,33 @@ public class UserActivity {
     @Column(name = "title")
     private String encryptionTitle;
 
+<<<<<<< Updated upstream
     @NotBlank
     @NotNull(message = "Encryption Title can not be null")
     @NotEmpty(message = "Encryption Title can not be empty")
+=======
+<<<<<<< HEAD
+    @NonNull
+>>>>>>> Stashed changes
     private String passkey;
 
 
+<<<<<<< Updated upstream
     private LocalDate date;
 
 
+=======
+    @NonNull
+=======
+    @NotBlank
+    private String passkey;
+
+    @Value("${LocalDate.now()}")
+    private LocalDate date;
+
+    @NotBlank
+>>>>>>> parent of 0128780 (All endpoint for creation of User)
+>>>>>>> Stashed changes
     @Enumerated(value = EnumType.STRING)
     private Activity activity;
 
