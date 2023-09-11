@@ -1,21 +1,25 @@
 package com.Davidson.EncryptionSystem.model;
 
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.Collection;
 import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Getter
 @Setter
+@Builder
 @Entity
-@Table(name = "users", schema = "active_users", uniqueConstraints = @UniqueConstraint(columnNames = {"full_name", "username"}))
+@Table(name = "users", schema = "active_users", uniqueConstraints = @UniqueConstraint(columnNames = {"username"}))
 public class Users implements UserDetails {
 
     @Id
@@ -23,18 +27,13 @@ public class Users implements UserDetails {
     @Column(name = "user_id", nullable = false)
     private long id;
 
-
-    @NonNull
     @Column(name = "full_name")
     private String fullName;
 
-    @NonNull
     private String username;
 
-    @NonNull
     private String password;
 
-    @NonNull
     @Enumerated(EnumType.STRING)
     private Role role;
 
