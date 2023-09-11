@@ -5,6 +5,7 @@ import com.Davidson.EncryptionSystem.repository.UserRepository;
 import com.Davidson.EncryptionSystem.requests.AuthenticationRequest;
 import com.Davidson.EncryptionSystem.requests.AuthenticationResponse;
 import com.Davidson.EncryptionSystem.requests.UserRegistrationRequest;
+import com.Davidson.EncryptionSystem.requests.UserRegistrationResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,7 +24,7 @@ public class AuthenticationService {
 
     private AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(UserRegistrationRequest userRegistrationRequest) throws Exception {
+    public UserRegistrationResponse register(UserRegistrationRequest userRegistrationRequest) throws Exception {
 
     Users user = Users.builder().fullName(userRegistrationRequest.getFullName())
             .password(passwordEncoder.encode(userRegistrationRequest.getPassword()))
@@ -32,11 +33,16 @@ public class AuthenticationService {
             .build();
     userRepository.save(user);
 
-    String token = jwtService.generateToken(user);
-
-    return AuthenticationResponse.builder()
-            .token(token)
-            .build();
+        return UserRegistrationResponse.builder()
+                .username(userRegistrationRequest.getUsername())
+                .fullName(userRegistrationRequest.getFullName())
+                .password(userRegistrationRequest.getPassword())
+                .build();
+//    String token = jwtService.generateToken(user);
+//
+//    return AuthenticationResponse.builder()
+//            .token(token)
+//            .build();
 
     }
 

@@ -13,9 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 @Service
@@ -66,7 +64,7 @@ public class JWTService {
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -74,10 +72,15 @@ public class JWTService {
 
     public boolean isTokenValid(String token, UserDetails userDetails){
         String username = extractUsername(token);
-        return username.equalsIgnoreCase(userDetails.getUsername()) && !isTokenExpired(token);
+        return (username.equalsIgnoreCase(userDetails.getUsername()) && !isTokenExpired(token) && !this.blackList.contains(token));
     }
 
     public String refreshToken(UserDetails userDetails){
         return generateToken(userDetails);
+    }
+
+    private List<String> blackList = new ArrayList<>();
+    public void addToBlacklist(String jti) {
+        this.blackList.add(jti);
     }
 }

@@ -4,12 +4,10 @@ import com.Davidson.EncryptionSystem.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
@@ -27,7 +25,5 @@ public class UserRegistrationRequest {
     @Length(min = 6, max = 50, message = "Password should be more than 5 letters")
     private String password;
 
-    @NotNull
-    @Value("USER")
     private Role role;
 }

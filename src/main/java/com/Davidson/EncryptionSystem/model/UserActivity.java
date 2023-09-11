@@ -1,9 +1,6 @@
 package com.Davidson.EncryptionSystem.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
 
@@ -13,9 +10,11 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
-@Data
+
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "user_activity", schema = "active_users")
 public class UserActivity {
@@ -24,7 +23,7 @@ public class UserActivity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne()
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
@@ -35,12 +34,14 @@ public class UserActivity {
     private String encryptionTitle;
 
     @NotBlank
+    @NotNull(message = "Encryption Title can not be null")
+    @NotEmpty(message = "Encryption Title can not be empty")
     private String passkey;
 
-    @Value("${LocalDate.now()}")
+
     private LocalDate date;
 
-    @NotBlank
+
     @Enumerated(value = EnumType.STRING)
     private Activity activity;
 

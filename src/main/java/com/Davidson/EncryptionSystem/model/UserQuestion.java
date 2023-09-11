@@ -8,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -30,11 +31,11 @@ public class UserQuestion {
     @NotBlank
     @NotNull
     @NotEmpty
-    @Length(min = 6, max = 14)
+    @Length(min = 6, max = 256)
     private String secretKey;
 
-    @OneToOne(optional = false)
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
-    private Users users;
+    @OneToOne(optional = true)
+    @JoinColumn(name = "user_id", unique = true)
+    private Users user;
 
 }

@@ -13,6 +13,7 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 
 import javax.mail.internet.MimeMessage;
 import java.io.InputStream;
+import java.time.LocalDate;
 
 @SpringBootApplication
 @EnableCaching
@@ -21,6 +22,8 @@ public class EncryptionSystemApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(EncryptionSystemApplication.class, args);
+
+		System.out.println(LocalDate.now());
 	}
 
 }
