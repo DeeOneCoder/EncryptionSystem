@@ -10,12 +10,10 @@ import lombok.Data;
 public class AuthenticationResponse {
 
     private String token;
-<<<<<<< Updated upstream
 
     @Override
     public String toString(){
         return this.token;
     }
-=======
->>>>>>> Stashed changes
+
 }

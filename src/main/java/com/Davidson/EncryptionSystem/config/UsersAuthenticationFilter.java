@@ -70,13 +70,7 @@ public class UsersAuthenticationFilter extends OncePerRequestFilter {
             }
 
             filterChain.doFilter(request, response);
-
         }
-
-
-
-
-
 
     }
 }

@@ -7,9 +7,11 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.session.SimpleRedirectInvalidSessionStrategy;
 
 
 @Configuration
@@ -29,12 +31,8 @@ public class SecurityConfig {
                         .anyRequest()
                         .authenticated())
                 .sessionManagement()
-<<<<<<< Updated upstream
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-=======
-                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
->>>>>>> Stashed changes
-                .and()
+                .and().cors().and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(usersAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults());

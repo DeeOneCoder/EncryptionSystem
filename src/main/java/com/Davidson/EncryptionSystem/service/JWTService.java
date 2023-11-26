@@ -6,20 +6,13 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.patterns.IToken;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-<<<<<<< Updated upstream
 import java.util.*;
-=======
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
->>>>>>> Stashed changes
 import java.util.function.Function;
 
 @Service
@@ -28,8 +21,8 @@ public class JWTService {
 
     private final String SECRET_KEY = "5367566B59703373357638792F423F4528482B4D6251655468576D5A71347437";
 
-    @Autowired
-    private UserRepository userRepository;
+
+    private final UserRepository userRepository;
 
     private Key getSigningKey(){
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
@@ -70,11 +63,7 @@ public class JWTService {
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-<<<<<<< Updated upstream
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
-=======
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15))
->>>>>>> Stashed changes
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -82,22 +71,20 @@ public class JWTService {
 
     public boolean isTokenValid(String token, UserDetails userDetails){
         String username = extractUsername(token);
-<<<<<<< Updated upstream
+
         return (username.equalsIgnoreCase(userDetails.getUsername()) && !isTokenExpired(token) && !this.blackList.contains(token));
-=======
-        return username.equalsIgnoreCase(userDetails.getUsername()) && !isTokenExpired(token);
->>>>>>> Stashed changes
+
+
     }
 
     public String refreshToken(UserDetails userDetails){
         return generateToken(userDetails);
     }
-<<<<<<< Updated upstream
 
-    private List<String> blackList = new ArrayList<>();
+
+    private final List<String> blackList = new ArrayList<>();
     public void addToBlacklist(String jti) {
         this.blackList.add(jti);
     }
-=======
->>>>>>> Stashed changes
+
 }

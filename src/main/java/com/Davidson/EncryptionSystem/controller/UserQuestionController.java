@@ -22,7 +22,7 @@ public class UserQuestionController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @PostMapping("/{id}")
+    @PostMapping(value = "/{id}")
     @ResponseBody
     @PreAuthorize("USER")
     public ResponseEntity<UserQuestion> postUserQuestion(@RequestBody @Valid UserQuestion userQuestion,

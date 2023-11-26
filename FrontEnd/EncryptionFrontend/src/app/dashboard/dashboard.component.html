@@ -1,0 +1,93 @@
+<div class="control">
+    <div class="header-info">
+        <div class="top">
+            <div><img class="img logo" src="./assets/img/logo.png" alt="Pix" />
+            </div>
+            <h4 class="anime">Data Encryption Software</h4>
+
+        </div>
+        <a class="logout" href="/logout" routerLink="/logout">
+            <span><img class="user" src="./assets/img/user.png" alt="User Picture" /></span><span> Logout </span>
+        </a>
+    </div>
+    <div class="home-btn-main">
+
+        <a class="btn-main btn" routerLinkActive="active" (click)="encrypt()">
+            <div>
+                <h1 class="big">ENCRYPT</h1>
+            </div>
+            <div class="control-icon"><img class="img" src="./assets/img/encrypt.png" alt="Pix" /></div>
+        </a>
+
+        <a class="btn-main btn" routerLinkActive="active" (click)="decrypt()">
+            <div>
+                <h1 class="big">DECRYPT</h1>
+            </div>
+            <div class="control-icon"><img class="img" src="./assets/img/decrypt.png" alt="Pix" /></div>
+        </a>
+
+        <a class="btn-main btn active" routerLinkActive="active" (click)="dashboard()"
+            [routerLinkActiveOptions]="{exact: true}">
+            <div>
+                <h1 class="big">ACTIVITY</h1>
+            </div>
+            <div class="control-icon"><img class="img" src="./assets/img/list.png" alt="Pix" /></div>
+        </a>
+
+        <a class="btn-main btn" routerLinkActive="active" (click)="faq()">
+            <div>
+                <h1 class="big">F. A. Q.</h1>
+            </div>
+            <div class="control-icon"><img class="img" src="./assets/img/faq.png" alt="Pix" /></div>
+        </a>
+
+        <a class="btn-main btn" routerLinkActive="active" (click)="howto()">
+            <div>
+                <h1 class="big">HOW TO</h1>
+            </div>
+            <div class="control-icon"><img class="img" src="./assets/img/howto.png" alt="Pix" /></div>
+        </a>
+        <br><br><br>
+        <div class="logo">
+            <div><img class="body-logo" src="./assets/img/logo.png" alt="Pix" /></div>
+
+        </div>
+
+
+    </div>
+
+    <div class="display-border">
+
+        <div class="display-main">
+            <h4 class="main-header">Activity List</h4>
+            <br>
+
+            <table class="table table-striped table-bordered thead" id="activityTable">
+                <thead>
+                    <tr>
+                        <th class="first">S / No.</th>
+                        <th>Date</th>
+                        <th>Title</th>
+                        <th>Activity</th>
+                        <th>Passkey</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let userActivity of userActivities, let i = index">
+                        <td class="first"> {{i + 1}} </td>
+                        <td> {{userActivity.date}} </td>
+                        <td> {{userActivity.encryptionTitle}} </td>
+                        <td> {{userActivity.activity}} </td>
+                        <td> {{userActivity.passkey}} </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+
+    <div class="footer">
+
+    </div>

@@ -1,16 +1,10 @@
 package com.Davidson.EncryptionSystem.controller;
 
-<<<<<<< Updated upstream
 import com.Davidson.EncryptionSystem.model.Role;
 import com.Davidson.EncryptionSystem.requests.AuthenticationRequest;
 import com.Davidson.EncryptionSystem.requests.AuthenticationResponse;
 import com.Davidson.EncryptionSystem.requests.UserRegistrationRequest;
 import com.Davidson.EncryptionSystem.requests.UserRegistrationResponse;
-=======
-import com.Davidson.EncryptionSystem.requests.AuthenticationRequest;
-import com.Davidson.EncryptionSystem.requests.AuthenticationResponse;
-import com.Davidson.EncryptionSystem.requests.UserRegistrationRequest;
->>>>>>> Stashed changes
 import com.Davidson.EncryptionSystem.service.AuthenticationService;
 import com.Davidson.EncryptionSystem.service.MessageService;
 import lombok.RequiredArgsConstructor;
@@ -33,14 +27,10 @@ public class LoginAndAuthenticationController {
     private final MessageService messageService;
 
     @PostMapping("/signup")
-<<<<<<< Updated upstream
     public ResponseEntity<UserRegistrationResponse> registerUser(@RequestBody @Valid UserRegistrationRequest userRegistrationRequest) throws Exception {
         userRegistrationRequest.setRole(Role.USER);
         UserRegistrationResponse response = authenticationService.register(userRegistrationRequest);
-=======
-    public ResponseEntity<AuthenticationResponse> registerUser(@RequestBody @Valid UserRegistrationRequest userRegistrationRequest) throws Exception {
-        AuthenticationResponse response = authenticationService.register(userRegistrationRequest);
->>>>>>> Stashed changes
+
         messageService.sendMail(userRegistrationRequest.getUsername(),
                 "Registration Successful for " + userRegistrationRequest.getFullName(),
                 "Congratulations!\n\nYou have successfully registered " +
@@ -52,11 +42,7 @@ public class LoginAndAuthenticationController {
 
     }
 
-<<<<<<< Updated upstream
-    @PostMapping
-=======
-    @PostMapping("/")
->>>>>>> Stashed changes
+    @PostMapping("")
     public ResponseEntity<AuthenticationResponse> authenticateUser(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
         return new ResponseEntity<>(authenticationService.authenticateUser(authenticationRequest), HttpStatus.ACCEPTED);
     }

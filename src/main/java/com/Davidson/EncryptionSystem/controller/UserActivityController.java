@@ -3,163 +3,116 @@ package com.Davidson.EncryptionSystem.controller;
 import com.Davidson.EncryptionSystem.model.Activity;
 import com.Davidson.EncryptionSystem.model.UserActivity;
 import com.Davidson.EncryptionSystem.model.Users;
-<<<<<<< Updated upstream
+import com.Davidson.EncryptionSystem.repository.UserActivityRepository;
 import com.Davidson.EncryptionSystem.repository.UserRepository;
 import com.Davidson.EncryptionSystem.service.UserActivityService;
 import lombok.RequiredArgsConstructor;
-=======
-import com.Davidson.EncryptionSystem.service.UserActivityService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
->>>>>>> Stashed changes
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-<<<<<<< Updated upstream
 import javax.validation.Valid;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/encryption")
 @RequiredArgsConstructor
+@CrossOrigin
 public class UserActivityController {
 
     private final UserActivityService userActivityService;
     private final UserRepository userRepository;
+    private final UserActivityRepository userActivityRepository;
 
     @GetMapping("/activity/{id}")
     @ResponseBody
-    @PreAuthorize("USER")
+    @PreAuthorize("hasRole('Role_USER') and #id == authentication.principal.id and user.username = authorization.name")
     public List<UserActivity> getUserActivities(@PathVariable Long id){
         Users user = userRepository.findById(id).orElseThrow();
-        return userActivityService.findByUser(user);
-=======
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-
-@RestController
-@RequiredArgsConstructor
-@RequestMapping(value = "/encryption")
-public class UserActivityController {
-
-    @Autowired
-    private final UserActivityService userActivityService;
-
-    @GetMapping("/activity/{user_id}")
-    @ResponseBody
-    @PreAuthorize("USER")
-    public List<UserActivity> getUserActivities(@PathVariable long user_id){
-        return userActivityService.findByUser(user_id);
->>>>>>> Stashed changes
+        Comparator<UserActivity> dateComp = (a,b) -> (int)b.getId() - (int)(a.getId());
+        return userActivityService.findByUser(user).stream()
+                .sorted(dateComp).collect(Collectors.toList());
     }
 
-    @GetMapping("/activity-title/{user_id}")
+    @GetMapping("/activity")
+    public Page<UserActivity> pagedActivities(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+        Pageable pageable = PageRequest.of(page, size);
+        return userActivityRepository.findAll(pageable);
+    }
+
+    @GetMapping("/activity-title/{id}")
     @ResponseBody
     @PreAuthorize("USER")
-<<<<<<< Updated upstream
-    public List<UserActivity> findActivitiesByTitle(@PathVariable Long user_id, @RequestBody String title){
-        Users user = userRepository.findById(user_id).orElseThrow();
+    public List<UserActivity> findActivitiesByTitle(@PathVariable Long id, @RequestBody String title){
+        Users user = userRepository.findById(id).orElseThrow();
         return userActivityService.findActivity(title, user);
-=======
-    public List<UserActivity> findActivitiesByTitle(@PathVariable long user_id, @RequestBody String title){
-        return userActivityService.findActivity(title, user_id);
->>>>>>> Stashed changes
     }
 
-    @GetMapping("/activity-date/{user_id}")
+    @GetMapping("/activity-date/{id}")
     @ResponseBody
     @PreAuthorize("USER")
-<<<<<<< Updated upstream
-    public List<UserActivity> findActivitiesByDate(@PathVariable Long user_id, @RequestBody LocalDate date){
-        Users user = userRepository.findById(user_id).orElseThrow();
+    public List<UserActivity> findActivitiesByDate(@PathVariable Long id, @RequestBody LocalDate date){
+        Users user = userRepository.findById(id).orElseThrow();
         return userActivityService.getByDate(date, user);
-=======
-    public List<UserActivity> findActivitiesByDate(@PathVariable long user_id, @RequestBody LocalDate date){
-        return userActivityService.getByDate(date, user_id);
->>>>>>> Stashed changes
     }
 
-    @GetMapping("/activity-type/{user_id}")
+    @GetMapping("/activity-type/{id}")
     @ResponseBody
     @PreAuthorize("USER")
-<<<<<<< Updated upstream
-    public List<UserActivity> findActivitiesByType(@PathVariable Long user_id, @RequestBody Activity activityString){
-        Users user = userRepository.findById(user_id).orElseThrow();
+    public List<UserActivity> findActivitiesByType(@PathVariable Long id, @RequestBody Activity activityString){
+        Users user = userRepository.findById(id).orElseThrow();
         return userActivityService.getActivityByType(activityString, user);
     }
 
-    @GetMapping("/encrypted")
+    @GetMapping("/encrypted/{id}")
     @ResponseBody
-    @PreAuthorize("USER")
-    public List<UserActivity> getAllEncryptionActivities(@PathVariable Long user_id){
-        Users user = userRepository.findById(user_id).orElseThrow();
-        return userActivityService.getEncryptionActivities(user);
+    @PreAuthorize("hasRole('Role_USER') and #id == authentication.principal.id")
+    public List<UserActivity> getAllEncryptionActivities(@PathVariable Long id){
+        Users user = userRepository.findById(id).orElseThrow();
+        return userActivityService.findByUser(user).stream()
+                .filter(userActivity -> userActivity.getActivity().equals(Activity.ENCRYPT))
+                .sorted((a, b) -> b.getDate().compareTo(a.getDate()))
+                .collect(Collectors.toList());
     }
 
-    @GetMapping("/decrypted")
+    @GetMapping("/decrypted/{id}")
     @ResponseBody
-    @PreAuthorize("USER")
-    public List<UserActivity> getAllDecryptionActivities(@PathVariable Long user_id){
-        Users user = userRepository.findById(user_id).orElseThrow();
-        return userActivityService.getDecryptionActivities(user);
+    @PreAuthorize("hasRole('Role_USER') and #id == authentication.principal.id")
+    public List<UserActivity> getAllDecryptionActivities(@PathVariable Long id){
+        Users user = userRepository.findById(id).orElseThrow();
+        return userActivityService.findByUser(user).stream()
+                .filter(userActivity -> userActivity.getActivity().equals(Activity.DECRYPT))
+                .sorted((a, b) -> b.getDate().compareTo(a.getDate()))
+                .collect(Collectors.toList());
     }
 
-    @PostMapping("/encrypt/{user_id}")
-    @PreAuthorize("USER")
+    @PostMapping("/encrypt/{id}")
+    @PreAuthorize("hasRole('Role_USER') and #id == authentication.principal.id")
     public ResponseEntity<UserActivity> postEncryptionActivity(@RequestBody @Valid UserActivity userActivity,
-                                                               @PathVariable Long user_id ) throws Exception {
-        Users user = userRepository.findById(user_id).orElseThrow();
+                                                               @PathVariable Long id ) {
+        Users user = userRepository.findById(id).orElseThrow();
         userActivity.setUser(user);
         userActivity.setActivity(Activity.ENCRYPT);
         userActivity.setDate(LocalDate.now());
         return userActivityService.postActivity(userActivity);
     }
 
-    @PostMapping("/decrypt/{user_id}")
-    @PreAuthorize("USER")
+    @PostMapping("/decrypt/{id}")
+    @PreAuthorize("hasRole('Role_USER') and #id == authentication.principal.id")
     public ResponseEntity<UserActivity> postDecryptionActivity(@RequestBody @Valid UserActivity userActivity,
-                                                               @PathVariable Long user_id ) throws Exception {
-        Users user = userRepository.findById(user_id).orElseThrow();
+                                                               @PathVariable Long id ) {
+        Users user = userRepository.findById(id).orElseThrow();
         userActivity.setUser(user);
         userActivity.setActivity(Activity.DECRYPT);
         userActivity.setDate(LocalDate.now());
         return userActivityService.postActivity(userActivity);
-=======
-    public List<UserActivity> findActivitiesByType(@PathVariable long user_id, @RequestBody Activity activityString){
-        return userActivityService.getActivityByType(activityString, user_id);
     }
 
-    @GetMapping("activity/encryption")
-    @ResponseBody
-    @PreAuthorize("USER")
-    public List<UserActivity> getAllEncryptionActivities(@PathVariable long user_id){
-        return userActivityService.getEncryptionActivities(user_id);
-    }
-
-    @GetMapping("activity/encryption")
-    @ResponseBody
-    @PreAuthorize("USER")
-    public List<UserActivity> getAllDecryptionActivities(@PathVariable long user_id){
-        return userActivityService.getDecryptionActivities(user_id);
-    }
-
-    @PostMapping("/activity/encrypt")
-    @ResponseBody
-    @PreAuthorize("USER")
-    public ResponseEntity<UserActivity> postEncryptionActivity(UserActivity userActivity){
-        return userActivityService.postEncryptionActivity(userActivity);
-    }
-
-    @PostMapping("/activity/decrypt")
-    @ResponseBody
-    @PreAuthorize("USER")
-    public ResponseEntity<UserActivity> postDecryptionActivity(UserActivity userActivity){
-        return userActivityService.postDecryptionActivity(userActivity);
->>>>>>> Stashed changes
-    }
 
 
 }
